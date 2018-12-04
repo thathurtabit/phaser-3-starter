@@ -1,4 +1,4 @@
-# Webpack Frontend Starterkit
+# Phaser 3 / Webpack / Babel 7 Frontend Starterkit
 
 A lightweight foundation for your next webpack based frontend project.
 
