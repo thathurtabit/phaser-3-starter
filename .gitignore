@@ -1,19 +1,14 @@
-node_modules/
-dist/
-build/
-dev/
-.vscode/
-.idea
-*.log
-src_old
-*.old.js
-phaserTilemapfix
-*.zip
-legacy*
-*.txt
-dump/
-*.docx
-*.patch
-*.bak*
-*.old*
-higherVolume/
+# dependencies
+node_modules
+
+# production
+build
+
+# misc
+.DS_Store
+
+npm-debug.log
+yarn-error.log
+yarn.lock
+.yarnclean
+.vscode
