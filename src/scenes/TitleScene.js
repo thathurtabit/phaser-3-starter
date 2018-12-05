@@ -54,8 +54,7 @@ class TitleScene extends Phaser.Scene {
       scene: this,
       key: "player1",
       x: this.sys.game.config.width / 2,
-      y: this.sys.game.config.height / 2 - 150,
-      frame: 1
+      y: this.sys.game.config.height / 2 - 150
     });
 
     // Add Physics
