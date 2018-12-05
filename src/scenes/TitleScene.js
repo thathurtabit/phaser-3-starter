@@ -1,3 +1,5 @@
+import Player from "../sprites/Player";
+
 class TitleScene extends Phaser.Scene {
   constructor() {
     super({
@@ -42,13 +44,23 @@ class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    // NOTE: Order matters, first load = back of stack
+
     // BG IMAGE
     this.add.image(400, 300, "sky");
+
+    // Create player
+    this.player = new Player({
+      scene: this,
+      key: "player1",
+      x: this.sys.game.config.width / 2,
+      y: this.sys.game.config.height / 2 - 150,
+      frame: 1
+    });
 
     // Add Physics
     this.bombs = this.physics.add.group();
     this.platforms = this.physics.add.staticGroup();
-    this.player1 = this.physics.add.sprite(100, 450, "player1");
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -68,32 +80,8 @@ class TitleScene extends Phaser.Scene {
     this.platforms.create(50, 250, "ground");
     this.platforms.create(750, 220, "ground");
 
-    // PLAYER
-    this.player1.setBounce(0.2);
-    this.player1.setCollideWorldBounds(true);
-
-    // PLAYER ANIM (left)
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("player1", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    // PLAYER ANIM (turn)
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "player1", frame: 4 }],
-      frameRate: 20
-    });
-
-    // PLAYER ANIM (right)
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("player1", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1
-    });
+    this.player.create();
+    this.add.existing(this.player);
 
     // STARS
     this.stars = this.physics.add.group({
@@ -107,10 +95,10 @@ class TitleScene extends Phaser.Scene {
     );
 
     // COLLISIONS
-    this.physics.add.collider(this.player1, this.platforms);
+    this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.stars, this.platforms);
     this.physics.add.overlap(
-      this.player1,
+      this.player,
       this.stars,
       this.collectStar,
       null,
@@ -118,7 +106,7 @@ class TitleScene extends Phaser.Scene {
     );
     this.physics.add.collider(this.bombs, this.platforms);
     this.physics.add.collider(
-      this.player1,
+      this.player,
       this.bombs,
       this.hitBomb,
       null,
@@ -127,22 +115,7 @@ class TitleScene extends Phaser.Scene {
   }
 
   update() {
-    if (this.cursors.left.isDown) {
-      this.player1.body.velocity.x = -160;
-
-      this.player1.anims.play("left", true);
-    } else if (this.cursors.right.isDown) {
-      this.player1.body.velocity.x = 160;
-
-      this.player1.anims.play("right", true);
-    } else {
-      this.player1.body.velocity.x = 0;
-
-      this.player1.anims.play("turn");
-    }
-    if (this.cursors.up.isDown && this.player1.body.touching.down) {
-      this.player1.body.velocity.y = -330;
-    }
+    this.player.update();
   }
 }
 
